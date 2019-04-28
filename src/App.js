@@ -2,9 +2,6 @@ import React, { Component } from 'react';
 import './App.css';
 import {Button, TextField} from '@material-ui/core';
 import {TableComponent} from './components/TableComponent';
-import { connect } from 'react-redux';
-import handleFetchData from './actions';
-import { bindActionCreators } from 'redux'
 import {getPlayers} from '../src/api/getPlayers'
 
 class App extends Component {
@@ -14,47 +11,37 @@ class App extends Component {
       players: []
     }
   }
-
+componentWillMount() {
+  this.getData();
+}
   getData = async () => {
     this.setState({
       players: await getPlayers()
     })
-  } 
-
+  }
+  
   render () {
-    console.log('PROPS APP', this.props, this.state)
+    console.log('PROPS APP', this.state)
     return (
       <div className="App">
           <h1>Squad Maker</h1>
           <TextField
-           style={{width: 300}}
+            style={{width: 300}}
             label='Enter Number of Squads'
           />
-          <Button variant='contained' color='secondary' onClick = {this.getData}>
-          TRY
+          <Button
+            style={{margin: 10}} 
+            variant='contained'
+            color='secondary'
+            onClick = {this.getData}>
+          Create Squads
           </Button>
          <div>
-          {/* {this.props.fetchData()} */}
-            <TableComponent />
-          </div>
-          <div>
-            <TableComponent />
+            <TableComponent data={this.state.players[0]}/>
           </div>
       </div>
     );
   }
 }
-const mapStateToProps = (state) => {
-  return {
-    app: state
-  }
-}
 
-const mapDispatchToProps = dispatch => bindActionCreators(
-  {
-    handleFetchData,
-  },
-  dispatch,
-)
-
-export default connect(mapStateToProps, mapDispatchToProps)(App)
+export default App;

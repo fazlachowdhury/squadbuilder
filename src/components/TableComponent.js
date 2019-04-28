@@ -12,9 +12,12 @@ import
 
 export  class TableComponent extends Component {
     render() {
+        console.log('TABLE', this.props.data)
+        const tableData = this.props.data;
         return (
-            <div style={{margin: 20}}>
-         <Paper square>
+        <div style={{margin: 20}}>
+        {tableData ? 
+         (<Paper square>
            <Table>
                <TableHead>
                    <TableRow>
@@ -22,11 +25,17 @@ export  class TableComponent extends Component {
                        <TableCell className='tableCellHeader' align='center'>Shooting</TableCell>
                        <TableCell className='tableCellHeader' align='center'>Skating</TableCell>
                        <TableCell className='tableCellHeader' align='center'>Checking</TableCell>
-                       </TableRow>
+                  </TableRow>
                </TableHead>
-               <TableBody>Test</TableBody>
+               <TableBody>
+                   <TableCell className='tableCellHeader' align='center'>{tableData.firstName + ' ' + tableData.lastName}</TableCell>
+                   <TableCell className='tableCellHeader' align='center'>{tableData.skills[0].rating}</TableCell>
+                   <TableCell className='tableCellHeader' align='center'>{tableData.skills[1].rating}</TableCell>
+                   <TableCell className='tableCellHeader' align='center'>{tableData.skills[2].rating}</TableCell>
+                </TableBody>
            </Table>
-           </Paper>
+           </Paper>) : null
+           }
            </div> 
         );
     }
