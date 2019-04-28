@@ -24,7 +24,7 @@ export function generateSquads(playerList, squads) {
       //Fill the empty squads first.
       if(counter < squads && tempSquad[counter].length == 0){
         tempSquad[counter].push(player);
-        // playerList.splice(playerList.indexOf(player), 1);
+
         console.log('squadShootingSum:', squadShootingSum);
 
         squadShootingSum[counter] = parseInt(player.skills[0].rating);
@@ -32,6 +32,9 @@ export function generateSquads(playerList, squads) {
         squadCheckingSum[counter] = parseInt(player.skills[2].rating);
 
         console.log('squadShootingSum:', squadShootingSum);
+        // _.remove(playerList, {
+        //     _id: player._id
+        // });
         counter++;
       }else{
          let squadSelected;
@@ -66,6 +69,10 @@ export function generateSquads(playerList, squads) {
               squadSkatingSum.splice(squadSelected,1,squadSkatingSum[squadSelected] + parseInt(player.skills[1].rating));
               squadCheckingSum.splice(squadSelected,1,squadCheckingSum[squadSelected] + parseInt(player.skills[2].rating));
               console.log('squadShootingSum after updating', squadShootingSum);
+          }else{
+              console.log('squadSelected but not added:', squadSelected);
+              console.log('tempSquad[squadSelected] but not added:', tempSquad[squadSelected]);
+
           }
       }
     })
