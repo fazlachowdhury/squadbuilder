@@ -1,9 +1,8 @@
 import _ from 'lodash';
-export function generateSquads(allPlayersList, squads) { 
+export function generateSquads(allPlayersList, squads) {
 
     //copy array
     let currentPlayerList = _.clone(allPlayersList, true);
-    console.log("Cloned player list:",currentPlayerList);
 
     //Players in each squad.
     const playerLimit = Math.floor(currentPlayerList.length/ squads);
@@ -38,7 +37,7 @@ export function generateSquads(allPlayersList, squads) {
         counter++;
       }else{
          let squadSelected;
-          //add the player to the squad that has the smallest average for that skills
+          //find player's strongest skill to find suitable squad that has the smallest average for that skills
           if(playerStrongestSkill.type.toUpperCase() === "SHOOTING"){
             squadSelected = squadShootingSum.indexOf(squadShootingSum.reduce(function(prev, curr) {
                 return prev < curr ? prev : curr;
@@ -71,11 +70,16 @@ export function generateSquads(allPlayersList, squads) {
 
     }
 
+    _.each(tempSquad, (squad) => {
+      if(squad.length < playerLimit){
+        squad.push(currentPlayerList[0]);
+        _(currentPlayerList).splice(0, 1).value();
+      }
+    });
+
     //Rest of the players will go into new squad.
     tempSquad.push([]);
-    _.each(currentPlayerList, (player) => {
-      tempSquad[tempSquad.length - 1].push(player);
-    });
+    tempSquad[tempSquad.length - 1] = _.clone(currentPlayerList, true); 
 
     console.log("Squad:", tempSquad);
     console.log("Current Player list:", currentPlayerList);
