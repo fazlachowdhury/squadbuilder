@@ -1,7 +1,6 @@
 import _ from 'lodash';
 export function generateSquads(playerList, squads) {
     const playerLimit = Math.floor(playerList.length/ squads);
-    console.log('playerLimit:', playerLimit);
 
     let squadShootingSum = [],
         squadSkatingSum = [],
@@ -11,11 +10,11 @@ export function generateSquads(playerList, squads) {
     for (let i = 0; i< squads; i++) {
         tempSquad.push([])
     }
-    console.log('tempSquad1', tempSquad);
 
     let counter = 0;
 
-    _.each(playerList, (player) => {
+    for (let playerCounter = playerList.length - 1 ; playerCounter >= 0 ; playerCounter--){
+      let player = playerList[playerCounter];
 
       let playerStrongestSkill = player.skills.reduce(function(prev, curr) {
           return prev.rating > curr.rating ? prev : curr;
@@ -24,17 +23,11 @@ export function generateSquads(playerList, squads) {
       //Fill the empty squads first.
       if(counter < squads && tempSquad[counter].length == 0){
         tempSquad[counter].push(player);
-
-        console.log('squadShootingSum:', squadShootingSum);
-
         squadShootingSum[counter] = parseInt(player.skills[0].rating);
         squadSkatingSum[counter] = parseInt(player.skills[1].rating);
         squadCheckingSum[counter] = parseInt(player.skills[2].rating);
-
-        console.log('squadShootingSum:', squadShootingSum);
-        // _.remove(playerList, {
-        //     _id: player._id
-        // });
+        //remove player from list indicating player has been added to a squad.
+        _(playerList).splice(playerCounter, 1).value();
         counter++;
       }else{
          let squadSelected;
@@ -53,38 +46,31 @@ export function generateSquads(playerList, squads) {
             squadSelected = squadCheckingSum.indexOf(squadCheckingSum.reduce(function(prev, curr) {
                 return prev < curr ? prev : curr;
             }));
-            console.log('squadCheckingSum', squadCheckingSum[squadSelected]);
           }
 
 
           squadSelected = Number(squadSelected);
-          console.log('tempSquad[squadSelected].length:',tempSquad[squadSelected].length, typeof tempSquad[squadSelected].length);
-          console.log('playerLimit:',playerLimit, typeof playerLimit);
 
           if(tempSquad[squadSelected].length < playerLimit){
               tempSquad[squadSelected].push(player);
-              // playerList.splice(squadSelected, 1);
-              console.log('squadShootingSum', squadShootingSum);
               squadShootingSum.splice(squadSelected,1,squadShootingSum[squadSelected] + parseInt(player.skills[0].rating));
               squadSkatingSum.splice(squadSelected,1,squadSkatingSum[squadSelected] + parseInt(player.skills[1].rating));
               squadCheckingSum.splice(squadSelected,1,squadCheckingSum[squadSelected] + parseInt(player.skills[2].rating));
-              console.log('squadShootingSum after updating', squadShootingSum);
-          }else{
-              console.log('squadSelected but not added:', squadSelected);
-              console.log('tempSquad[squadSelected] but not added:', tempSquad[squadSelected]);
-
+              //remove player from list indicating player has been added to a squad.
+              _(playerList).splice(playerCounter, 1).value();
           }
       }
-    })
+
+    }
+
+
+
 
     //Rest of the players will go into new squad.
     tempSquad.push([]);
-    for(let i = playerList.legth - 1; i > playerLimit * squads ; i--){
-      tempSquad[tempSquad.length - 1].push(playerList[i]);
-    }
-    // _.each(playerList, (player) => {
-    //   tempSquad[tempSquad.length - 1].push(player);
-    // });
+    _.each(playerList, (player) => {
+      tempSquad[tempSquad.length - 1].push(player);
+    });
 
     console.log('rest of the players', tempSquad);
 }
