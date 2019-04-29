@@ -1,15 +1,18 @@
 import React, { Component } from 'react';
 import './App.css';
+import _ from 'lodash';
 import {Button, TextField} from '@material-ui/core';
 import {TableComponent} from './components/TableComponent';
 import {getPlayers} from '../src/api/getPlayers'
 import {generateSquads} from './utils'
+import { element } from 'prop-types';
 class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
       players: [],
-      squads: 0
+      squads: 0,
+      squadsArray: []
     }
   }
 componentWillMount() {
@@ -21,8 +24,25 @@ componentWillMount() {
     })
   }
 
+  handleOnClick = () => {
+    const tempArray = generateSquads(this.state.players, this.state.squads);
+    this.setState({
+      squadsArray: tempArray
+    })
+
+  }
+
+  renderArrayElements = (val) => {
+    const tempRenderer = [];
+    if (!_.isEmpty(this.state.squadsArray)) {
+      _.each(this.state.squadsArray, (element) => {
+        tempRenderer.push(<TableComponent id={_.uniqueId()} data={element}/>)
+      })
+    } 
+   return tempRenderer
+  }
+
   render () {
-    console.log('PROPS APP', this.state)
     return (
       <div className="App">
           <h1>Squad Maker</h1>
@@ -30,7 +50,6 @@ componentWillMount() {
             style={{width: 300}}
             label='Enter Number of Squads'
             onChange={(event) => {
-              console.log('state change', event.target.value)
               this.setState({
                 squads: event.target.value
               })
@@ -40,12 +59,30 @@ componentWillMount() {
             style={{margin: 10}}
             variant='contained'
             color='secondary'
-            onClick = {(val) => generateSquads(this.state.players, this.state.squads)}>
+            onClick = {(val) => this.handleOnClick()}
+            >
           Create Squads
           </Button>
-         <div>
-            <TableComponent data={this.state.players[0]}/>
-          </div>
+          <Button
+            style={{margin: 10}}
+            variant='contained'
+            color='secondary'
+            // onClick = {(val) => this.handleOnClick()}
+            >
+          Reset Squads
+          </Button>
+          {/* {!_.isEmpty(this.state.squadsArray)? (
+            _.each(this.state.squadsArray, (element)=>{
+              this.renderArrayElements(element)
+              // return (
+              // <div id={_.uniqueId()}>
+              //   <TableComponent data={element}/>
+              // </div>
+            // )
+            })
+          ) : []
+          } */}
+          {this.renderArrayElements()}
       </div>
     );
   }

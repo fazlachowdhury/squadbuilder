@@ -1,7 +1,12 @@
 import _ from 'lodash';
-export function generateSquads(playerList, squads) {
+export function generateSquads(allPlayersList, squads) { 
+
+    //copy array
+    let currentPlayerList = _.clone(allPlayersList, true);
+    console.log("Cloned player list:",currentPlayerList);
+
     //Players in each squad.
-    const playerLimit = Math.floor(playerList.length/ squads);
+    const playerLimit = Math.floor(currentPlayerList.length/ squads);
 
     //used to balance team average for each skill
     let squadShootingSum = [],
@@ -14,8 +19,8 @@ export function generateSquads(playerList, squads) {
     }
 
     let counter = 0;
-    for (let playerCounter = playerList.length - 1 ; playerCounter >= 0 ; playerCounter--){
-      let player = playerList[playerCounter];
+    for (let playerCounter = currentPlayerList.length - 1 ; playerCounter >= 0 ; playerCounter--){
+      let player = currentPlayerList[playerCounter];
       //Use player's strongest skill while selecting a squad.
       let playerStrongestSkill = player.skills.reduce(function(prev, curr) {
           return prev.rating > curr.rating ? prev : curr;
@@ -29,7 +34,7 @@ export function generateSquads(playerList, squads) {
         squadSkatingSum[counter] = parseInt(player.skills[1].rating);
         squadCheckingSum[counter] = parseInt(player.skills[2].rating);
         //remove player from list indicating player has been added to a squad.
-        _(playerList).splice(playerCounter, 1).value();
+        _(currentPlayerList).splice(playerCounter, 1).value();
         counter++;
       }else{
          let squadSelected;
@@ -60,7 +65,7 @@ export function generateSquads(playerList, squads) {
               squadSkatingSum.splice(squadSelected,1,squadSkatingSum[squadSelected] + parseInt(player.skills[1].rating));
               squadCheckingSum.splice(squadSelected,1,squadCheckingSum[squadSelected] + parseInt(player.skills[2].rating));
               //remove player from list indicating player has been added to a squad.
-              _(playerList).splice(playerCounter, 1).value();
+              _(currentPlayerList).splice(playerCounter, 1).value();
           }
       }
 
@@ -68,9 +73,13 @@ export function generateSquads(playerList, squads) {
 
     //Rest of the players will go into new squad.
     tempSquad.push([]);
-    _.each(playerList, (player) => {
+    _.each(currentPlayerList, (player) => {
       tempSquad[tempSquad.length - 1].push(player);
     });
 
-    console.log('rest of the players', tempSquad);
+    console.log("Squad:", tempSquad);
+    console.log("Current Player list:", currentPlayerList);
+    console.log("All Player list:", allPlayersList);
+
+    return tempSquad;
 }

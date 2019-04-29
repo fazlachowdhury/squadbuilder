@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import './table.css';
-import 
+import _ from 'lodash';
+import
 {
     Table,
     TableRow,
@@ -11,12 +12,29 @@ import
 } from '@material-ui/core';
 
 export  class TableComponent extends Component {
+
+    renderTableCells = () => {
+        const tempArray = []
+        _.each(this.props.data, (data) => {
+           tempArray.push(
+               <>
+               <TableRow id={_.uniqueId()}>
+                <TableCell className='tableCellHeader' align='center'>{data.firstName + ' ' + data.lastName}</TableCell>
+                <TableCell className='tableCellHeader' align='center'>{data.skills[0].rating}</TableCell>
+                <TableCell className='tableCellHeader' align='center'>{data.skills[1].rating}</TableCell>
+                <TableCell className='tableCellHeader' align='center'>{data.skills[2].rating}</TableCell>
+                </TableRow>
+                </>
+        )})
+        return tempArray
+    }
+
     render() {
-        console.log('TABLE', this.props.data)
         const tableData = this.props.data;
+        console.log('Table', tableData)
         return (
         <div style={{margin: 20}}>
-        {tableData ? 
+        {tableData ?
          (<Paper square>
            <Table>
                <TableHead>
@@ -28,15 +46,12 @@ export  class TableComponent extends Component {
                   </TableRow>
                </TableHead>
                <TableBody>
-                   <TableCell className='tableCellHeader' align='center'>{tableData.firstName + ' ' + tableData.lastName}</TableCell>
-                   <TableCell className='tableCellHeader' align='center'>{tableData.skills[0].rating}</TableCell>
-                   <TableCell className='tableCellHeader' align='center'>{tableData.skills[1].rating}</TableCell>
-                   <TableCell className='tableCellHeader' align='center'>{tableData.skills[2].rating}</TableCell>
+                   {this.renderTableCells()}
                 </TableBody>
            </Table>
            </Paper>) : null
            }
-           </div> 
+           </div>
         );
     }
 }
