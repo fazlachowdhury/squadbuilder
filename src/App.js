@@ -29,7 +29,13 @@ componentWillMount() {
     this.setState({
       squadsArray: tempArray
     })
+  }
 
+  resetOnClick = () => {
+    this.setState({ 
+        squads: 0,
+        squadsArray: []
+    })
   }
 
   renderArrayElements = (val) => {
@@ -38,7 +44,10 @@ componentWillMount() {
       _.each(this.state.squadsArray, (element) => {
         tempRenderer.push(<TableComponent id={_.uniqueId()} data={element}/>)
       })
-    } 
+    }
+  //   tempRenderer.push(<div id={_.uniqueId()}>
+  //     <TableComponent data={element}/>
+  //  </div>)
    return tempRenderer
   }
 
@@ -55,7 +64,7 @@ componentWillMount() {
               })
             }}
           />
-          <Button
+          <Button className = 'createSquads'
             style={{margin: 10}}
             variant='contained'
             color='secondary'
@@ -63,11 +72,11 @@ componentWillMount() {
             >
           Create Squads
           </Button>
-          <Button
+          <Button className = 'resetSquads'
             style={{margin: 10}}
             variant='contained'
             color='secondary'
-            // onClick = {(val) => this.handleOnClick()}
+            onClick = {(val) => this.resetOnClick()}
             >
           Reset Squads
           </Button>
