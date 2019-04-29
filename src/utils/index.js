@@ -1,7 +1,9 @@
 import _ from 'lodash';
 export function generateSquads(playerList, squads) {
+    //Players in each squad.
     const playerLimit = Math.floor(playerList.length/ squads);
 
+    //used to balance team average for each skill
     let squadShootingSum = [],
         squadSkatingSum = [],
         squadCheckingSum = [];
@@ -12,10 +14,9 @@ export function generateSquads(playerList, squads) {
     }
 
     let counter = 0;
-
     for (let playerCounter = playerList.length - 1 ; playerCounter >= 0 ; playerCounter--){
       let player = playerList[playerCounter];
-
+      //Use player's strongest skill while selecting a squad.
       let playerStrongestSkill = player.skills.reduce(function(prev, curr) {
           return prev.rating > curr.rating ? prev : curr;
       });
@@ -23,6 +24,7 @@ export function generateSquads(playerList, squads) {
       //Fill the empty squads first.
       if(counter < squads && tempSquad[counter].length == 0){
         tempSquad[counter].push(player);
+        //update squad stats
         squadShootingSum[counter] = parseInt(player.skills[0].rating);
         squadSkatingSum[counter] = parseInt(player.skills[1].rating);
         squadCheckingSum[counter] = parseInt(player.skills[2].rating);
@@ -53,6 +55,7 @@ export function generateSquads(playerList, squads) {
 
           if(tempSquad[squadSelected].length < playerLimit){
               tempSquad[squadSelected].push(player);
+              //update squad stats
               squadShootingSum.splice(squadSelected,1,squadShootingSum[squadSelected] + parseInt(player.skills[0].rating));
               squadSkatingSum.splice(squadSelected,1,squadSkatingSum[squadSelected] + parseInt(player.skills[1].rating));
               squadCheckingSum.splice(squadSelected,1,squadCheckingSum[squadSelected] + parseInt(player.skills[2].rating));
@@ -62,9 +65,6 @@ export function generateSquads(playerList, squads) {
       }
 
     }
-
-
-
 
     //Rest of the players will go into new squad.
     tempSquad.push([]);
