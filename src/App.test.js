@@ -1,9 +1,35 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import App from './App';
+import { shallow, configure, mount } from 'enzyme';
+import Adapter from "enzyme-adapter-react-16";
 
-it('renders without crashing', () => {
-  const div = document.createElement('div');
-  ReactDOM.render(<App />, div);
-  ReactDOM.unmountComponentAtNode(div);
+configure({ adapter: new Adapter() });
+
+describe('App components', () => {
+
+  it('should render without throwing an error', () => {
+    expect(shallow(<App />).exists()).toBe(true)
+  })
+
+  it('should have text fields', () => {
+    const wrapper = mount(<App />);
+    expect(wrapper.find('TextField').exists()).toBe(true)
+  })
+
+  it('should have create squad button', () => {
+    const wrapper = mount(<App />);
+    expect(wrapper.find('button.createSquads').exists()).toBe(true)
+  })
+
+  it('should have reset squad button', () => {
+    const wrapper = mount(<App />);
+    expect(wrapper.find('button.resetSquads').exists()).toBe(true)
+  })
+
+  it('Pressing reset squad button should reset squads to 2 as default', () => {
+    const wrapper = mount(<App />);
+    wrapper.find('button.resetSquads').simulate('click')
+    expect(wrapper.instance().state.squads).toEqual(2);
+  })
+
 });

@@ -6,12 +6,13 @@ import {TableComponent} from './components/TableComponent';
 import {getPlayers} from '../src/api/getPlayers'
 import {generateSquads} from './utils'
 import { element } from 'prop-types';
+
 class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
       players: [],
-      squads: 0,
+      squads:  2,
       squadsArray: []
     }
   }
@@ -24,16 +25,19 @@ componentWillMount() {
     })
   }
 
+  //Handles Create Squad button click event
   handleOnClick = () => {
     const tempArray = generateSquads(this.state.players, this.state.squads);
     this.setState({
       squadsArray: tempArray
     })
+
   }
 
+  //Handles Reset Squad button click event
   resetOnClick = () => {
-    this.setState({ 
-        squads: 0,
+    this.setState({
+        squads: 2,
         squadsArray: []
     })
   }
@@ -45,9 +49,6 @@ componentWillMount() {
         tempRenderer.push(<TableComponent id={_.uniqueId()} data={element}/>)
       })
     }
-  //   tempRenderer.push(<div id={_.uniqueId()}>
-  //     <TableComponent data={element}/>
-  //  </div>)
    return tempRenderer
   }
 
@@ -56,8 +57,8 @@ componentWillMount() {
       <div className="App">
           <h1>Squad Maker</h1>
           <TextField
-            style={{width: 300}}
-            label='Enter Number of Squads'
+            style={{width: 300}} 
+            label='Enter Number of Squads (Default: 2)'
             onChange={(event) => {
               this.setState({
                 squads: event.target.value
@@ -67,8 +68,8 @@ componentWillMount() {
           <Button className = 'createSquads'
             style={{margin: 10}}
             variant='contained'
-            color='secondary'
-            onClick = {(val) => this.handleOnClick()}
+            color='primary'
+            onClick = {this.handleOnClick}
             >
           Create Squads
           </Button>
@@ -76,21 +77,10 @@ componentWillMount() {
             style={{margin: 10}}
             variant='contained'
             color='secondary'
-            onClick = {(val) => this.resetOnClick()}
+            onClick = {this.resetOnClick}
             >
           Reset Squads
           </Button>
-          {/* {!_.isEmpty(this.state.squadsArray)? (
-            _.each(this.state.squadsArray, (element)=>{
-              this.renderArrayElements(element)
-              // return (
-              // <div id={_.uniqueId()}>
-              //   <TableComponent data={element}/>
-              // </div>
-            // )
-            })
-          ) : []
-          } */}
           {this.renderArrayElements()}
       </div>
     );
