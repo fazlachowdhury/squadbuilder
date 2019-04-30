@@ -12,7 +12,7 @@ class App extends Component {
     super(props);
     this.state = {
       players: [],
-      squads:  2,
+      squads:  0,
       squadsArray: []
     }
   }
@@ -37,9 +37,9 @@ componentWillMount() {
   //Handles Reset Squad button click event
   resetOnClick = () => {
     this.setState({
-        squads: 2,
+        squads: 0,
         squadsArray: []
-    })
+    }) 
   }
 
   renderArrayElements = (val) => {
@@ -57,8 +57,8 @@ componentWillMount() {
       <div className="App">
           <h1>Squad Maker</h1>
           <TextField
-            style={{width: 300}} 
-            label='Enter Number of Squads (Default: 2)'
+            style={{width: 300}}
+            label='Enter Number of Squads '
             onChange={(event) => {
               this.setState({
                 squads: event.target.value

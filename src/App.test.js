@@ -29,7 +29,7 @@ describe('App components', () => {
   it('Pressing reset squad button should reset squads to 2 as default', () => {
     const wrapper = mount(<App />);
     wrapper.find('button.resetSquads').simulate('click')
-    expect(wrapper.instance().state.squads).toEqual(2);
+    expect(wrapper.instance().state.squads).toEqual(0);
   })
 
 });
